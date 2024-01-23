@@ -1,0 +1,31 @@
+{
+    "name": "stefanmcds-mnt/utilita",
+    "description": "Utilita Classi di servizio utile",
+    "version": "1.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "STEF@N MCDS S.a.s.",
+            "email": "info@stefan-mcds.it",
+            "homepage": "https://www.stefan-mcds.it"
+        }
+    ],
+    "homepage": "https://github.com/stefanmcds-mnt/utilita",
+    "keywords": [
+        "Utilita"
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Utilita\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Utilita\\Tests\\": "tests"
+        }
+    }
+}
