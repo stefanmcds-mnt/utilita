@@ -35,35 +35,16 @@ class Array2XML
     private static $xml = null;
 
     /**
-     * Convert an Array to XML.
+     * Get the root XML node, if there isn't one, create it.
      *
-     * @param string $node_name - name of the root node to be converted
-     * @param array  $arr       - array to be converted
-     * @param array  $docType   - optional docType
-     *
-     * @return DOMDocument
-     * @throws Exception
+     * @return DOMDocument|null
      */
-    public static function createXML(
-        ?string $node_name = null,
-        ?array $arr = [],
-        ?array $docType = []
-    ) {
-        $xml = self::getXMLRoot();
-        // BUG 008 - Support <!DOCTYPE>
-        if ($docType) {
-            $xml->appendChild(
-                (new DOMImplementation())
-                    ->createDocumentType(
-                        $docType['name'] ?? '',
-                        $docType['publicId'] ?? '',
-                        $docType['systemId'] ?? ''
-                    )
-            );
+    public static function getXMLRoot()
+    {
+        if (empty(self::$xml)) {
+            self::init();
         }
-        $xml->appendChild(self::convert($node_name, $arr));
-        self::$xml = null;    // clear the xml node in the class for 2nd time use.
-        return $xml;
+        return self::$xml;
     }
 
     /**
@@ -87,18 +68,35 @@ class Array2XML
     }
 
     /**
-     * Get string representation of boolean value.
+     * Convert an Array to XML.
      *
-     * @param mixed $v
+     * @param string $node_name - name of the root node to be converted
+     * @param array  $arr       - array to be converted
+     * @param array  $docType   - optional docType
      *
-     * @return string
+     * @return DOMDocument
+     * @throws Exception
      */
-    private static function bool2str(?string $v)
-    {
-        //convert boolean to text value.
-        $v = $v === true ? 'true' : $v;
-        $v = $v === false ? 'false' : $v;
-        return $v;
+    public static function createXML(
+        ?string $node_name = null,
+        ?array $arr = [],
+        ?array $docType = []
+    ) {
+        $xml = self::getXMLRoot();
+        // BUG 008 - Support <!DOCTYPE>
+        if (!empty($docType)) {
+            $xml->appendChild(
+                (new DOMImplementation())
+                    ->createDocumentType(
+                        $docType['name'] ?? '',
+                        $docType['publicId'] ?? '',
+                        $docType['systemId'] ?? ''
+                    )
+            );
+        }
+        $xml->appendChild(self::convert($node_name, $arr));
+        self::$xml = null;    // clear the xml node in the class for 2nd time use.
+        return $xml;
     }
 
     /**
@@ -179,16 +177,18 @@ class Array2XML
     }
 
     /**
-     * Get the root XML node, if there isn't one, create it.
+     * Get string representation of boolean value.
      *
-     * @return DOMDocument|null
+     * @param mixed $v
+     *
+     * @return string
      */
-    public static function getXMLRoot()
+    private static function bool2str(?string $v)
     {
-        if (empty(self::$xml)) {
-            self::init();
-        }
-        return self::$xml;
+        //convert boolean to text value.
+        $v = $v === true ? 'true' : $v;
+        $v = $v === false ? 'false' : $v;
+        return $v;
     }
 
     /**
