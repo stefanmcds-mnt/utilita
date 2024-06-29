@@ -2,6 +2,9 @@
 
 namespace Utilita;
 
+use DateTime;
+use DateTimeZone;
+
 class DateService
 {
 
@@ -136,7 +139,6 @@ class DateService
         return $serial;
     }
 
-
     /*
      * converte in giorni una data seriale
      *
@@ -181,5 +183,25 @@ class DateService
             }
         }
         return $trf;
+    }
+
+    public static function _DataEstesa(mixed $time, ?string $zone)
+    {
+        if (is_null($time)) {
+            return;
+        }
+        /*
+        if (is_string($time)) {
+            $time = (int) strtotime($time);
+        }
+        $data = new DateTime($time, new DateTimezone($zone));
+        */
+        if (isset($zone)) {
+            date_default_timezone_set($zone);
+        }
+        $mese = static::_getMese($time);
+        $giorno = date('d', strtotime($time));
+        $anno = date('Y', strtotime($time));
+        return "$giorno $mese $anno";
     }
 }
